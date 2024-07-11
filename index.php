@@ -65,7 +65,7 @@ if (!isset($_SESSION['logged_in'])) {
                 // Refresh button handler
                 document.getElementById("refresh-button").addEventListener("click", function(event) {
                     event.preventDefault(); // Prevent form submission
-                    location.reload(); // Reload the page
+                    window.location.href = window.location.href; // Reload the page
                 });
             });
         </script>';
