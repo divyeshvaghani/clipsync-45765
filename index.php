@@ -1,6 +1,6 @@
 <?php
 // Define the simple password
-define('SIMPLE_PASSWORD', 'enjoy');
+define('SIMPLE_PASSWORD', 'solutions');
 
 // Start the session
 session_start();
