@@ -1,9 +1,12 @@
 <?php
 // Define the simple password
-define('SIMPLE_PASSWORD', 'edit');
+define('SIMPLE_PASSWORD', 'enjoy');
 
 // Start the session
 session_start();
+
+// Path to the data file
+$data_file = '/var/www/html/data.txt';
 
 // Handle data saving
 $message = '';
@@ -16,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = '<p style="color: red;">Incorrect password. Please try again.</p>';
         }
     } elseif (isset($_POST['user_data'])) {
-        file_put_contents('/var/www/html/data.txt', $_POST['user_data']);
+        file_put_contents($data_file, $_POST['user_data']);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
 }
@@ -41,7 +44,7 @@ if (!isset($_SESSION['logged_in'])) {
             <button type="submit">Login</button>
         </form>';
 } else {
-    $user_data = file_exists('/var/www/html/data.txt') ? file_get_contents('/var/www/html/data.txt') : '';
+    $user_data = file_exists($data_file) ? file_get_contents($data_file) : '';
     echo '<h1>Welcome!</h1>' . $message . '
         <form method="post">
             <label for="user_data">Enter your data:</label><br>
