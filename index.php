@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $message = '<p style="color: red;">Incorrect password. Please try again.</p>';
         }
-    } elseif (isset($_POST['user_data'])) {
+    } elseif (isset($_POST['save_data'])) {
         $sanitized_data = sanitize_text_field($_POST['user_data']);
         file_put_contents($data_file, $sanitized_data);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
@@ -61,7 +61,7 @@ if (!isset($_SESSION['logged_in'])) {
                         message.style.display = "none";
                     }, 1000); // 1 second
                 }
-                
+
                 // Refresh button handler
                 document.getElementById("refresh-button").addEventListener("click", function(event) {
                     event.preventDefault(); // Prevent form submission
