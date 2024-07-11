@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: custom-page
+    name: clipsync-45765
     env: php
     plan: free
     buildCommand: ""
