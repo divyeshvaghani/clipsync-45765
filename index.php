@@ -5,6 +5,11 @@ define('SIMPLE_PASSWORD', 'solution');
 // Start the session
 session_start();
 
+// Function to sanitize user input
+function sanitize_text_field($str) {
+    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
+}
+
 // Handle data saving
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -19,11 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         file_put_contents('data.txt', sanitize_text_field($_POST['user_data']));
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
-}
-
-// Sanitize user input
-function sanitize_text_field($str) {
-    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
 }
 
 // Check if session has expired
@@ -41,7 +41,7 @@ if (!isset($_SESSION['logged_in'])) {
             <button type="submit">Login</button>
         </form>';
 } else {
-    $user_data = file_get_contents('data.txt');
+    $user_data = file_exists('data.txt') ? file_get_contents('data.txt') : '';
     echo '<h1>Welcome!</h1>' . $message . '
         <form method="post">
             <label for="user_data">Enter your data:</label><br>
