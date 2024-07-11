@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = '<p style="color: red;">Incorrect password. Please try again.</p>';
         }
     } elseif (isset($_POST['save_data'])) {
-        $sanitized_data = sanitize_text_field($_POST['user_data']);
+        $sanitized_data = $_POST['user_data']; // Only sanitize for display
         file_put_contents($data_file, $sanitized_data);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
@@ -49,7 +49,7 @@ if (!isset($_SESSION['logged_in'])) {
     echo '<h1>Welcome!</h1>' . $message . '
         <form method="post">
             <label for="user_data">Enter your data:</label><br>
-            <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . $user_data . '</textarea><br>
+            <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . htmlspecialchars($user_data, ENT_QUOTES, 'UTF-8') . '</textarea><br>
             <button type="submit" name="save_data">Save</button>
             <button type="button" id="refresh-button" style="margin-left: 10px;">Refresh</button>
         </form>
@@ -65,7 +65,7 @@ if (!isset($_SESSION['logged_in'])) {
                 // Refresh button handler
                 document.getElementById("refresh-button").addEventListener("click", function(event) {
                     event.preventDefault(); // Prevent form submission
-                    window.location.reload(true); // Reload the page from the server
+                    window.location.reload(); // Reload the page
                 });
             });
         </script>';
