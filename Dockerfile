@@ -5,7 +5,7 @@ FROM php:7.4-apache
 COPY . /var/www/html/
 
 # Set file permissions
-RUN touch /var/www/html/data.txt && chmod 666 /var/www/html/data.txt && chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 # Expose port 80
 EXPOSE 80
