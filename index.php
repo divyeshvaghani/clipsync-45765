@@ -5,7 +5,15 @@ define('SIMPLE_PASSWORD', 'enjoy');
 // Start the session
 session_start();
 
-// Handle data saving
+// Path to the data file
+$data_file = '/var/www/html/data.txt';
+
+// Function to sanitize user input for display
+function sanitize_text_field($str) {
+    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
+}
+
+// Handle login and data saving
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['password'])) {
@@ -13,17 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['logged_in'] = true;
             $_SESSION['login_time'] = time();
         } else {
-            echo '<p style="color: red;">Incorrect password. Please try again.</p>';
+            $message = '<p style="color: red;">Incorrect password. Please try again.</p>';
         }
-    } elseif (isset($_POST['user_data'])) {
-        file_put_contents('data.txt', sanitize_text_field($_POST['user_data']));
+    } elseif (isset($_POST['save_data'])) {
+        $sanitized_data = $_POST['user_data']; // Do not sanitize here to prevent double escaping
+        file_put_contents($data_file, $sanitized_data);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
-}
-
-// Sanitize user input
-function sanitize_text_field($str) {
-    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
 }
 
 // Check if session has expired
@@ -41,13 +45,13 @@ if (!isset($_SESSION['logged_in'])) {
             <button type="submit">Login</button>
         </form>';
 } else {
-    $user_data = file_get_contents('data.txt');
+    $user_data = file_exists($data_file) ? file_get_contents($data_file) : '';
     echo '<h1>Welcome!</h1>' . $message . '
-        <form method="post">
+        <form method="post" id="data-form">
             <label for="user_data">Enter your data:</label><br>
-            <textarea id="user_data" name="user_data" rows="4" cols="50">' . htmlspecialchars($user_data) . '</textarea><br>
-            <button type="submit">Save</button>
-            <button type="button" onclick="location.reload();" style="margin-left: 10px;">Refresh</button>
+            <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . htmlspecialchars($user_data, ENT_QUOTES, 'UTF-8') . '</textarea><br>
+            <button type="submit" name="save_data">Save</button>
+            <button type="button" id="refresh-button" style="margin-left: 10px;">Refresh</button>
         </form>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -57,6 +61,12 @@ if (!isset($_SESSION['logged_in'])) {
                         message.style.display = "none";
                     }, 1000); // 1 second
                 }
+
+                // Refresh button handler
+                document.getElementById("refresh-button").addEventListener("click", function(event) {
+                    event.preventDefault(); // Prevent form submission
+                    location.reload(); // Reload the page
+                });
             });
         </script>';
 }
