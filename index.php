@@ -1,6 +1,6 @@
 <?php
 // Define the simple password
-define('SIMPLE_PASSWORD', 'enjoy');
+define('SIMPLE_PASSWORD', 'hello');
 
 // Start the session
 session_start();
@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = '<p style="color: red;">Incorrect password. Please try again.</p>';
         }
     } elseif (isset($_POST['user_data'])) {
-        file_put_contents($data_file, $_POST['user_data']);
+        $sanitized_data = sanitize_text_field($_POST['user_data']);
+        file_put_contents($data_file, $sanitized_data);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
 }
