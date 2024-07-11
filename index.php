@@ -51,7 +51,7 @@ if (!isset($_SESSION['logged_in'])) {
             <label for="user_data">Enter your data:</label><br>
             <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . $user_data . '</textarea><br>
             <button type="submit" name="save_data">Save</button>
-            <button type="button" onclick="location.reload();" style="margin-left: 10px;">Refresh</button>
+            <button type="button" id="refresh-button" style="margin-left: 10px;">Refresh</button>
         </form>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -61,6 +61,12 @@ if (!isset($_SESSION['logged_in'])) {
                         message.style.display = "none";
                     }, 1000); // 1 second
                 }
+                
+                // Refresh button handler
+                document.getElementById("refresh-button").addEventListener("click", function(event) {
+                    event.preventDefault(); // Prevent form submission
+                    location.reload();
+                });
             });
         </script>';
 }
