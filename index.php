@@ -1,6 +1,6 @@
 <?php
 // Define the simple password
-define('SIMPLE_PASSWORD', 'hello');
+define('SIMPLE_PASSWORD', 'enjoy');
 
 // Start the session
 session_start();
@@ -8,7 +8,12 @@ session_start();
 // Path to the data file
 $data_file = '/var/www/html/data.txt';
 
-// Handle data saving
+// Function to sanitize user input for display
+function sanitize_text_field($str) {
+    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
+}
+
+// Handle login and data saving
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['password'])) {
@@ -23,11 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         file_put_contents($data_file, $sanitized_data);
         $message = '<p id="save-message" style="color: green;">Data saved successfully!</p>';
     }
-}
-
-// Sanitize user input for display
-function sanitize_text_field($str) {
-    return htmlspecialchars(trim($str), ENT_QUOTES, 'UTF-8');
 }
 
 // Check if session has expired
@@ -49,7 +49,7 @@ if (!isset($_SESSION['logged_in'])) {
     echo '<h1>Welcome!</h1>' . $message . '
         <form method="post">
             <label for="user_data">Enter your data:</label><br>
-            <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . sanitize_text_field($user_data) . '</textarea><br>
+            <textarea id="user_data" name="user_data" rows="4" style="width: 75%; max-width: 100%;">' . $user_data . '</textarea><br>
             <button type="submit" name="save_data">Save</button>
             <button type="button" onclick="location.reload();" style="margin-left: 10px;">Refresh</button>
         </form>
